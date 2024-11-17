@@ -1,9 +1,8 @@
 from flask import Flask
-from extensions import db, migrate
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask.cli import FlaskGroup
 from src.app import create_app
+from src.extensions import db
 
 app = create_app()
 migrate = Migrate(app, db)

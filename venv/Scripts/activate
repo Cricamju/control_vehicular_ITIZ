@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="E:\Documents\University\5th Semester\Fundamentos de Ingenieria de Software\control_acceso_vehicular\venv"
+VIRTUAL_ENV="C:\Users\crica\Downloads\control_vehicular_ITIZ\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
