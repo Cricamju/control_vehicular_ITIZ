@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estacionamiento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .ocupado {
+            background-color: #f44336;
+            color: white;
+        }
+        .disponible {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .eliminar-btn {
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Estacionamiento ITIZ</h1>
+
+<input type="text" id="placa" placeholder="Ingrese la placa del vehículo">
+<button onclick="agregarVehiculo()">Agregar Vehículo</button>
+
+<table>
+    <thead>
+        <tr>
+            <th>Espacio</th>
+            <th>Placa</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody id="tablaEspacios">
+        <!-- Espacios generados aquí -->
+    </tbody>
+</table>
+
+<script>
+    const totalEspacios = 100;
+    const espacios = Array.from({ length: totalEspacios }, () => ({ placa: '', estado: 'disponible' }));
+
+    // Inicializar la tabla
+    function inicializarTabla() {
+        const tabla = document.getElementById('tablaEspacios');
+        for (let i = 0; i < totalEspacios; i++) {
+            const fila = document.createElement('tr');
+            const celdaEspacio = document.createElement('td');
+            celdaEspacio.textContent = `Espacio ${i + 1}`;
+            const celdaPlaca = document.createElement('td');
+            celdaPlaca.textContent = '';
+            const celdaEstado = document.createElement('td');
+            celdaEstado.textContent = 'Disponible';
+            celdaEstado.className = 'disponible';
+            const celdaAcciones = document.createElement('td');
+            celdaAcciones.innerHTML = '<button class="eliminar-btn" onclick="eliminarVehiculo(' + i + ')">Eliminar</button>';
+
+            fila.appendChild(celdaEspacio);
+            fila.appendChild(celdaPlaca);
+            fila.appendChild(celdaEstado);
+            fila.appendChild(celdaAcciones);
+            tabla.appendChild(fila);
+        }
+    }
+
+    // Agregar vehículo
+    function agregarVehiculo() {
+        const placa = document.getElementById('placa').value.trim();
+        if (!placa) {
+            alert('Por favor, ingrese una placa.');
+            return;
+        }
+
+        for (let i = 0; i < totalEspacios; i++) {
+            if (espacios[i].placa === placa) {
+                alert('La placa ya está ocupada en el espacio ' + (i + 1));
+                return;
+            }
+            if (espacios[i].estado === 'disponible') {
+                espacios[i] = { placa: placa, estado: 'ocupado' };
+                actualizarTabla();
+                document.getElementById('placa').value = '';
+                return;
+            }
+        }
+        alert('No hay espacios disponibles.');
+    }
+
+    // Eliminar vehículo
+    function eliminarVehiculo(index) {
+        if (espacios[index].estado === 'ocupado') {
+            espacios[index] = { placa: '', estado: 'disponible' };
+            actualizarTabla();
+        } else {
+            alert('No hay vehículo en este espacio.');
+        }
+    }
+
+    // Actualizar tabla
+    function actualizarTabla() {
+        const tabla = document.getElementById('tablaEspacios');
+        tabla.innerHTML = '';
+        for (let i = 0; i < totalEspacios; i++) {
+            const fila = document.createElement('tr');
+            const celdaEspacio = document.createElement('td');
+            celdaEspacio.textContent = `Espacio ${i + 1}`;
+            const celdaPlaca = document.createElement('td');
+            celdaPlaca.textContent = espacios[i].placa;
+            const celdaEstado = document.createElement('td');
+            celdaEstado.textContent = espacios[i].estado.charAt(0).toUpperCase() + espacios[i].estado.slice(1);
+            celdaEstado.className = espacios[i].estado === 'ocupado' ? 'ocupado' : 'disponible';
+            const celdaAcciones = document.createElement('td');
+            celdaAcciones.innerHTML = '<button class="eliminar-btn" onclick="eliminarVehiculo(' + i + ')">Eliminar</button>';
+
+            fila.appendChild(celdaEspacio);
+            fila.appendChild(celdaPlaca);
+            fila.appendChild(celdaEstado);
+            fila.appendChild(celdaAcciones);
+            tabla.appendChild(fila);
+        }
+    }
+
+    // Inicializar la tabla al cargar
+    inicializarTabla();
+</script>
+
+</body>
+</html>
